@@ -1,0 +1,8 @@
+[Unit]
+Description=NordVPN reconnector daemon
+
+[Service]
+ExecStart=/usr/bin/nordvpn-reconnector
+
+[Install]
+WantedBy=multi-user.target
