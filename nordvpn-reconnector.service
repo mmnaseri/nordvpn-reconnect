@@ -3,6 +3,10 @@ Description=NordVPN reconnector daemon
 
 [Service]
 ExecStart=/usr/bin/nordvpn-reconnector
+Restart=always
+StandardOutput=syslog
+Environment=NORDVPN_RECONNECT_NOTIFY=true
+Environment=NORDVPN_MAX_UPTIME='4 hours'
 
 [Install]
 WantedBy=multi-user.target
