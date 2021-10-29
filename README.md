@@ -47,15 +47,27 @@ NORDVPN_RECONNECT_NOTIFY=true ./nordvpn-reconnect.sh "1 hour"
 ### Using as a daemon
 
 To use as a daemon, you just need to create a unit (see the provided example `.service` file)
-and place it within reach of `systemctl`. The convenience install and uninstall scripts
-are tested to work no Arch Linux, but should work on other distros as well. 
+and place it within reach of `systemctl`. The convenience install script
+is tested to work no Arch Linux, but should work on other distros as well. 
 
 To use this as a daemon via the provided scripts, run:
 
 ```shell
-sudo ./install.sh
-sudo systemctl enable nordvpn-reconnector.service
-sudo systemctl start nordvpn-reconnector.service
+sudo ./install.sh install
+sudo ./install.sh enable
+sudo ./install.sh start
+```
+
+Or more succinctly:
+
+```shell
+sudo ./install.sh install enable start
+```
+
+In the same vein, to remove the script and all its traces:
+
+```shell
+sudo ./install.sh stop disable uninstall
 ```
 
 ## Contribution
