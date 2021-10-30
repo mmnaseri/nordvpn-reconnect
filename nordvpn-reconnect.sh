@@ -28,30 +28,25 @@ time_to_sec() {
 time_from_sec() {
   local value="$1"
   local str
-  if [[ $(( value % 60 )) != 0 ]];
-  then
-    str=" $(( value % 60 )) seconds"
-    value=$(( value - (value % 60) ))
+  if [[ $((value % 60)) != 0 ]]; then
+    str=" $((value % 60)) seconds"
+    value=$((value - (value % 60)))
   fi
-  value=$(( value / 60 ))
-  if [[ $(( value % 60 )) != 0 ]];
-  then
-    str=" $(( value % 60 )) minutes${str}"
-    value=$(( value - (value % 60) ))
+  value=$((value / 60))
+  if [[ $((value % 60)) != 0 ]]; then
+    str=" $((value % 60)) minutes${str}"
+    value=$((value - (value % 60)))
   fi
-  value=$(( value / 60 ))
-  if [[ $(( value % 24 )) != 0 ]];
-  then
-    str=" $(( value % 24 )) hours${str}"
-    value=$(( value - (value % 24) ))
+  value=$((value / 60))
+  if [[ $((value % 24)) != 0 ]]; then
+    str=" $((value % 24)) hours${str}"
+    value=$((value - (value % 24)))
   fi
-  value=$(( value / 24 ))
-  if [[ ${value} -gt 0 ]];
-  then
+  value=$((value / 24))
+  if [[ ${value} -gt 0 ]]; then
     str="${value} days${str}"
   fi
-  if [[ -z "${str}" ]];
-  then
+  if [[ -z "${str}" ]]; then
     echo "0 seconds"
     return 0
   fi
@@ -90,8 +85,7 @@ nordvpn_server() {
 ## do this so that we can create a path to the icon file.
 app_change_directory() {
   local path
-  if [[ -z "$(readlink -f "${0}")" ]];
-  then
+  if [[ -z "$(readlink -f "${0}")" ]]; then
     path="${0}"
   else
     path="$(readlink -f "${0}")"
@@ -101,8 +95,7 @@ app_change_directory() {
 
 ## If NOTIFY is set to <true>, it will send a notification via Gnome's notify-send.
 app_notify() {
-  if [[ "${NOTIFY}" != "true" ]];
-  then
+  if [[ "${NOTIFY}" != "true" ]]; then
     return 0
   fi
   notify-send -a "NordVPN Reconnector" -i "file://$(pwd)/icon.png" -c "network.connected" 'NordVPN Reconnector' "VPN connection re-established"
@@ -112,7 +105,22 @@ app_notify() {
 ## of the fact if needed.
 app_reconnect() {
   echo "Attempting to reconnect."
-  nordvpn connect "$(nordvpn_server)"
+  local server
+  server="$(nordvn_server)"
+  ## Try to reconnect the normal way.
+  if ! timeout 15s nordvpn connect "${server}"; then
+    ## If after 15 seconds we couldn't reconnect, kill the service forcibly.
+    local pid
+    pid="$(pgrep -f nordvpnd)"
+    echo "Attempting to kill process ${pid} for service nordvpnd"
+    ## Kill the service and try again.
+    if ! kill -9 "${pid}" >/dev/null >&1; then
+      ## If we couldn't kill the service, let the user know, and carry on.
+      echo "Failed to kill service; it may be that the service is running at a higher privilege than this script"
+    fi
+    ## Attempt to reconnect to the same server as before, if not possible, connect to an automatically picked server.
+    nordvpn connect "${server}" || nordvpn connect
+  fi
   app_notify
 }
 
@@ -125,7 +133,7 @@ app_is_locked() {
 ## The main method. The first parameter is an optional value of how long we should wait before reconnecting
 ## to VPN.
 ## Parameter 1: maximum uptime. This can be either the number of seconds or a string supported by time_to_sec.
-app_main () {
+app_main() {
   if ! nordvpn_is_available; then
     echo "NordVPN client is not available"
     exit 1
@@ -133,20 +141,18 @@ app_main () {
 
   local max_uptime="${1-${MAX_UPTIME}}"
 
-  if [[ -z "${max_uptime}" ]];
-  then
+  if [[ -z "${max_uptime}" ]]; then
     echo "No maximum runtime specified. Either set NORDVPN_MAX_UPTIME or pass in the first parameter."
     exit 1
   fi
 
-  if [[ -z "$(echo "${max_uptime}" | sed -E 's/^[[digit]]+$//')" ]];
-  then
+  if [[ -z "$(echo "${max_uptime}" | sed -E 's/^[[digit]]+$//')" ]]; then
     max_uptime="$(time_from_sec "${max_uptime}")"
   fi
 
   max_uptime="$(time_to_sec "${max_uptime}")"
 
-  local check_interval=$(( max_uptime / 10 ))
+  local check_interval=$((max_uptime / 10))
 
   # Change to the current directory.
   app_change_directory
@@ -154,16 +160,13 @@ app_main () {
   echo "Initializing NordVPN reconnector with a maximum uptime of $(time_from_sec "${max_uptime}")"
   [[ "${NOTIFY}" != "true" ]] && echo "Desktop notifications are disabled."
 
-  while true;
-  do
-    if app_is_locked;
-    then
+  while true; do
+    if app_is_locked; then
       echo "Lock in place. Not going to check for reconnection."
     else
       local current_uptime
       current_uptime=$(nordvpn_check_uptime)
-      if [[ ${current_uptime} -gt ${max_uptime} ]];
-      then
+      if [[ ${current_uptime} -gt ${max_uptime} ]]; then
         echo "Current uptime is $(time_from_sec "${current_uptime}"), which is greater than $(time_from_sec "${max_uptime}")"
         app_reconnect
       fi

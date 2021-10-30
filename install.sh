@@ -15,18 +15,15 @@ app_check_root() {
 }
 
 app_check_install() {
-  if [[ ! -f "${INSTALL_LOCATION}/nordvpn-reconnect.sh" ]];
-  then
+  if [[ ! -f "${INSTALL_LOCATION}/nordvpn-reconnect.sh" ]]; then
     echo "Service executable has not been installed. Please run $0 install first"
     exit 0
   fi
-  if [[ ! -f "${PATH_BINARY}" ]];
-  then
+  if [[ ! -f "${PATH_BINARY}" ]]; then
     echo "Service executable has not been installed. Please run $0 install first"
     exit 0
   fi
-  if [[ ! -f /etc/systemd/user/nordvpn-reconnector.service ]];
-  then
+  if [[ ! -f /etc/systemd/user/nordvpn-reconnector.service ]]; then
     echo "Service unit has not been installed. Please run $0 install first"
     exit 0
   fi
@@ -39,15 +36,13 @@ app_current_user() {
 
 app_systemctl_command() {
   local verbose="false"
-  if [[ "$1" == "-v" ]];
-  then
+  if [[ "$1" == "-v" ]]; then
     verbose="true"
     shift
   fi
   local command="$1"
   command="systemctl ${command} --machine=$(app_current_user)@.host --user nordvpn-reconnector.service"
-  if [[ "${verbose}" != "true" ]];
-  then
+  if [[ "${verbose}" != "true" ]]; then
     command="${command} > /dev/null"
   fi
   eval "${command} 2>&1"
@@ -78,15 +73,13 @@ app_install() {
 app_uninstall() {
   app_check_root
   echo " - Uninstalling nordvpn-reconnector"
-  if pgrep -f nordvpn-reconnector > /dev/null;
-  then
+  if pgrep -f nordvpn-reconnector >/dev/null; then
     echo
     echo "Service nordvpn-reconnector is still running in the background. Please stop it first using:"
     echo "   $0 stop"
     exit 1
   fi
-  if [[ "$(app_systemctl_link)" == "enabled" ]];
-  then
+  if [[ "$(app_systemctl_link)" == "enabled" ]]; then
     echo
     echo "Service nordvpn-reconnector is still enabled. Removing it may cause issues on next login."
     echo "Please disable it first by running:"
@@ -147,12 +140,12 @@ app_run() {
   *)
     echo "Unknown command ${command}"
     exit 1
+    ;;
   esac
 }
 
 app_main() {
-  if [[ $# == 0 ]];
-  then
+  if [[ $# == 0 ]]; then
     echo "Usage: $0 <command1> [<command2> <command3> ...]"
     echo
     echo "Available commands are:"
@@ -170,8 +163,7 @@ app_main() {
     exit 0
   fi
 
-  while [[ "$#" -gt 0 ]];
-  do
+  while [[ "$#" -gt 0 ]]; do
     app_run "$1"
     shift
   done
