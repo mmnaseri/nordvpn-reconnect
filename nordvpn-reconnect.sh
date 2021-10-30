@@ -106,17 +106,23 @@ app_notify() {
 app_reconnect() {
   echo "Attempting to reconnect."
   local server
-  server="$(nordvn_server)"
+  server="$(nordvpn_server)"
   ## Try to reconnect the normal way.
-  if ! timeout 15s nordvpn connect "${server}"; then
+  if ! timeout 1s nordvpn connect "${server}"; then
     ## If after 15 seconds we couldn't reconnect, kill the service forcibly.
     local pid
-    pid="$(pgrep -f nordvpnd)"
+    pid="$(pgrep -x nordvpnd)"
     echo "Attempting to kill process ${pid} for service nordvpnd"
     ## Kill the service and try again.
     if ! kill -9 "${pid}" >/dev/null >&1; then
-      ## If we couldn't kill the service, let the user know, and carry on.
+      ## If we couldn't kill the service, let the user know, and attempt to ask the sister service to do the dirty work.
       echo "Failed to kill service; it may be that the service is running at a higher privilege than this script"
+      echo "Asking nordvpnd-killer.service to take care of this for us."
+      touch /tmp/nordvpnd-killer.ask
+      sleep 15s
+      if [[ -f /tmp/nordvpnd-killer.ask ]]; then
+        echo "Seems like we failed to do this by asking nordvpnd-killer.service; please make sure that the service is running."
+      fi
     fi
     ## Attempt to reconnect to the same server as before, if not possible, connect to an automatically picked server.
     nordvpn connect "${server}" || nordvpn connect

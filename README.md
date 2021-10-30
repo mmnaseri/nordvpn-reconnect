@@ -44,6 +44,14 @@ A sample run with notifications (works on Gnome) and 1 hour uptime is:
 NORDVPN_RECONNECT_NOTIFY=true ./nordvpn-reconnect.sh "1 hour"
 ```
 
+If reconnection requests fail, the script will attempt to kill NordVPNd. If that fails, it will need to
+either be executed as root, or ask someone else who is to do the dirty work. That's why this script
+comes with a sister: `nordvpnd-killer.sh`.
+
+If you drop a file at `/tmp/nordvpnd-killer.ask` it will try to kill the service for you. The idea is that
+you run the original script as your own user, and the other script as root, to have the least amount of
+privilege handed to this script.
+
 ### Using as a daemon
 
 To use as a daemon, you just need to create a unit (see the provided example `.service` file)
@@ -69,6 +77,11 @@ In the same vein, to remove the script and all its traces:
 ```shell
 sudo ./install.sh stop disable uninstall
 ```
+
+### Pausing the Service
+
+If you drop a file at `/tmp/nordvpn-reconnect.lock`, the service will skip the current iteration.
+If you keep that file in place, it is going to be the same as never executing this service at all.
 
 ## Contribution
 

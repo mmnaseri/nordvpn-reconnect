@@ -1,0 +1,14 @@
+[Unit]
+Description=NordVPN killer daemon
+
+[Service]
+ExecStart=/usr/bin/nordvpnd-killer
+Restart=always
+StandardOutput=journal
+NonBlocking=true
+KillMode=process
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
