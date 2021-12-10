@@ -12,22 +12,21 @@ action fails, including attempting to disconnect or restart the `nordvpn(d).serv
 In such a state, the only recourse is to reboot the machine. Which is less than ideal.
 
 ## Installation
-To install nordvpn-reconnect I suggest closing the repository.
+To install nordvpn-reconnect I suggest cloning the repository.
 
 Follow these steps.
 
-1. Open a terminal with 
+1. Open a terminal with (on many Linux distros this can be done using <kbn>Ctrl+T</kbd>
 
-    ctrl + t
+2. If you do not have git installed, install it. (On Debian-based distros this is `sudo apt install git`).
 
-2. If you do not have git installed, install it. Type `sudo apt install git`
-3. type `sudo git clone https://github.com/mmnaseri/nordvpn-reconnect`. This will create a folder called "nordvpn-reconnect" in the current location.
+3. type `git clone https://github.com/mmnaseri/nordvpn-reconnect`. This will create a folder called "nordvpn-reconnect" in the current location.
 
 4. type `cd nordvpn-reconnect` inside the terminal to enter the folder
 
 5. For a simple installation type `sudo ./install.sh install`
 
-6. If you want to install the code, start it and enable a service that automatically starts type instead `sudo ./install.sh install`
+6. If you want to install the code, start it and enable a service that automatically starts type instead `sudo ./install.sh install enable start`
 
 ## Usage
 
