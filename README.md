@@ -11,6 +11,24 @@ action fails, including attempting to disconnect or restart the `nordvpn(d).serv
 
 In such a state, the only recourse is to reboot the machine. Which is less than ideal.
 
+## Installation
+To install nordvpn-reconnect I suggest closing the repository.
+
+Follow these steps.
+
+1. Open a terminal with 
+
+    ctrl + t
+
+2. If you do not have git installed, install it. Type `sudo apt install git`
+3. type `sudo git clone https://github.com/mmnaseri/nordvpn-reconnect`. This will create a folder called "nordvpn-reconnect" in the current location.
+
+4. type `cd nordvpn-reconnect` inside the terminal to enter the folder
+
+5. For a simple installation type `sudo ./install.sh install`
+
+6. If you want to install the code, start it and enable a service that automatically starts type instead `sudo ./install.sh install`
+
 ## Usage
 
 You can either run the main `nordvpn-reconnect.sh` script individually, or run it as
@@ -56,7 +74,7 @@ privilege handed to this script.
 
 To use as a daemon, you just need to create a unit (see the provided example `.service` file)
 and place it within reach of `systemctl`. The convenience install script
-is tested to work no Arch Linux, but should work on other distros as well. 
+is tested to work on Arch Linux and on Ubuntu 20.04, but should work on other distros as well. 
 
 To use this as a daemon via the provided scripts, run:
 
