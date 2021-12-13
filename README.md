@@ -65,9 +65,12 @@ If reconnection requests fail, the script will attempt to kill NordVPNd. If that
 either be executed as root, or ask someone else who is to do the dirty work. That's why this script
 comes with a sister: `nordvpnd-killer.sh`.
 
+#### Killing the NordVPN Daemon
+
 If you drop a file at `/tmp/nordvpnd-killer.ask` it will try to kill the service for you. The idea is that
 you run the original script as your own user, and the other script as root, to have the least amount of
-privilege handed to this script.
+privilege handed to this script. The location of this file can be modified by setting the `NORDVPN_KILLER_REQUEST_FILE`
+environment variable.
 
 ### Using as a daemon
 

@@ -2,6 +2,7 @@
 
 MAX_UPTIME=${NORDVPN_MAX_UPTIME-2 hours}
 NOTIFY=${NORDVPN_RECONNECT_NOTIFY-false}
+KILLER_REQUEST_FILE="${NORDVPN_KILLER_REQUEST_FILE-/tmp/nordvpnd-killer.ask}"
 
 #### Time utilities.
 
@@ -118,9 +119,9 @@ app_reconnect() {
       ## If we couldn't kill the service, let the user know, and attempt to ask the sister service to do the dirty work.
       echo "Failed to kill service; it may be that the service is running at a higher privilege than this script"
       echo "Asking nordvpnd-killer.service to take care of this for us."
-      touch /tmp/nordvpnd-killer.ask
+      touch "${NORDVPN_KILLER_REQUEST_FILE}"
       sleep 15s
-      if [[ -f /tmp/nordvpnd-killer.ask ]]; then
+      if [[ -f "${NORDVPN_KILLER_REQUEST_FILE}" ]]; then
         echo "Seems like we failed to do this by asking nordvpnd-killer.service; please make sure that the service is running."
       fi
     fi

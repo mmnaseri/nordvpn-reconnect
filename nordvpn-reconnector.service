@@ -7,6 +7,7 @@ Restart=always
 StandardOutput=journal
 Environment=NORDVPN_RECONNECT_NOTIFY=true
 Environment=NORDVPN_MAX_UPTIME='2 hours'
+Environment=NORDVPN_KILLER_REQUEST_FILE='/tmp/nordvpnd-killer.ask'
 
 [Install]
 WantedBy=default.target

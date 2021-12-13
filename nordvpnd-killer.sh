@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-REQUEST_FILE="/tmp/nordvpnd-killer.ask"
+REQUEST_FILE="${NORDVPN_KILLER_REQUEST_FILE-/tmp/nordvpnd-killer.ask}"
 
 [[ "$(id -u)" != "0" ]] && echo "This script must be executed as root." && exit 1
 
 echo "Starting NordVPNd Killer."
-echo "Drop a file /tmp/nordvpnd-killer.ask to ask for a kill."
+echo "Drop a file at ${REQUEST_FILE} to ask for a kill."
 
 while true;
 do

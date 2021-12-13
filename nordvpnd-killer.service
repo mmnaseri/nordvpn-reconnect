@@ -9,6 +9,7 @@ NonBlocking=true
 KillMode=process
 Restart=on-failure
 RestartSec=5
+Environment=NORDVPN_KILLER_REQUEST_FILE='/tmp/nordvpnd-killer.ask'
 
 [Install]
 WantedBy=default.target
