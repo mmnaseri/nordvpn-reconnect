@@ -16,7 +16,7 @@ To install nordvpn-reconnect I suggest cloning the repository.
 
 Follow these steps.
 
-1. Open a terminal with (on many Linux distros this can be done using <kbn>Ctrl+T</kbd>
+1. Open a terminal with (on many Linux distros this can be done using <kbn>Ctrl+T</kbd>)
 
 2. If you do not have git installed, install it. (On Debian-based distros this is `sudo apt install git`).
 
