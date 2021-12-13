@@ -41,7 +41,7 @@ The script consults the `nordvpn` client for uptime, and if it has been more tha
 preconfigured amount of time since it was connected to the current server (defaults
 to 2 hours), it will reconnect to the same server, thus making sure that the connection
 never stays open for more than that. The checking is done at intervals of one tenth of
-the indicated maximum uptime, so, for four hours, that would be every 12 minutes.
+the indicated maximum uptime, so, for two hours, that would be every 12 minutes.
 
 ### Running the script
 
@@ -49,11 +49,13 @@ The script takes a single, optional command line argument which is the maximum
 runtime it should check for. This can be either a number given in seconds, or a
 string with the format `X days Y hours Z minutes T seconds`, such as `4 hours 10 minutes`.
 
-There are two environment variables which the script will consult:
+There are three environment variables which the script will consult:
 
 - `NORDVPN_MAX_UPTIME`; indicates the default max uptime if the CLI parameter is not specified; defaults to `2 hours`.
 - `NORDVPN_RECONNECT_NOTIFY`; decides if the script should send a notification via `notify-send`
  every time it reconnects; defaults to `false`.
+- `NORDVPN_KILLER_REQUEST_FILE`; tells the script which file the killer script is looking for to kill the 
+ `nordvpnd` daemon for us if needed. The default is `/tmp/nordvpnd-killer.ask`.
 
 A sample run with notifications (works on Gnome) and 1 hour uptime is:
 
