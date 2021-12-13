@@ -6,7 +6,7 @@ ExecStart=/usr/bin/nordvpn-reconnector
 Restart=always
 StandardOutput=journal
 Environment=NORDVPN_RECONNECT_NOTIFY=true
-Environment=NORDVPN_MAX_UPTIME='4 hours'
+Environment=NORDVPN_MAX_UPTIME='2 hours'
 
 [Install]
 WantedBy=default.target

@@ -39,9 +39,9 @@ enable and run.
 
 The script consults the `nordvpn` client for uptime, and if it has been more than a
 preconfigured amount of time since it was connected to the current server (defaults
-to 4 hours), it will reconnect to the same server, thus making sure that the connection
+to 2 hours), it will reconnect to the same server, thus making sure that the connection
 never stays open for more than that. The checking is done at intervals of one tenth of
-the indicated maximum uptime, so, for four hours, that would be every 24 minutes.
+the indicated maximum uptime, so, for four hours, that would be every 12 minutes.
 
 ### Running the script
 
@@ -51,7 +51,7 @@ string with the format `X days Y hours Z minutes T seconds`, such as `4 hours 10
 
 There are two environment variables which the script will consult:
 
-- `NORDVPN_MAX_UPTIME`; indicates the default max uptime if the CLI parameter is not specified; defaults to `4 hours`.
+- `NORDVPN_MAX_UPTIME`; indicates the default max uptime if the CLI parameter is not specified; defaults to `2 hours`.
 - `NORDVPN_RECONNECT_NOTIFY`; decides if the script should send a notification via `notify-send`
  every time it reconnects; defaults to `false`.
 

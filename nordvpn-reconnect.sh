@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-MAX_UPTIME=${NORDVPN_MAX_UPTIME-4 hours}
+MAX_UPTIME=${NORDVPN_MAX_UPTIME-2 hours}
 NOTIFY=${NORDVPN_RECONNECT_NOTIFY-false}
 
 #### Time utilities.
