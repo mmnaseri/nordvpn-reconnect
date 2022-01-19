@@ -19,5 +19,18 @@ do
   echo "Attempting to kill nordvpn at PID ${pid}"
   kill -9 "${pid}"
   rm -rf "${REQUEST_FILE}"
+  echo "Waiting to see if the service comes up on its own in 2 seconds ..."
+  sleep 2s
+  if [[ -z "$(pgrep -x nordvpnd)" ]];
+  then
+    echo "NordVPN daemon needs some help recovering. Using systemctl"
+    systemctl start nordvpnd
+    echo "Waiting to see if NordVPN daemon recovered after our nudge."
+    sleep 2s
+    if [[ -z "$(pgrep -x nordvpnd)" ]];
+    then
+      echo "It seems like systemctl wasn't able to start nordvpnd. See <journalctl -u nordvpnd> or <systemctl status nordvpnd> for more information."
+    fi
+  fi
   echo "My job is done. Going back to sleep ..."
 done
